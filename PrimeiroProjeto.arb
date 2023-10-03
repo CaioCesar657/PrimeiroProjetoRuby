@@ -1,0 +1,51 @@
+require 'gtk3'
+
+class IconeFlutuanteApp
+  def initialize
+    # Cria a janela principal
+    @window = Gtk::Window.new
+    @window.title = 'Aplicativo de Ícones Flutuantes'
+    @window.set_default_size(800, 600)
+
+    # Cria uma caixa de rolagem
+    @scroll_window = Gtk::ScrolledWindow.new
+    @window.add(@scroll_window)
+
+    # Cria um layout para conter os ícones flutuantes
+    @layout = Gtk::Layout.new
+    @scroll_window.add(@layout)
+
+    # Cria ícones flutuantes
+    create_icon("Home", Gtk::Stock::HOME, 100, 100)
+    create_icon("Test", Gtk::Stock::APPLY, 300, 300)
+    create_icon("About", Gtk::Stock::ABOUT, 500, 500)
+
+    # Conecta o evento de fechar da janela
+    @window.signal_connect('destroy') { Gtk.main_quit }
+  end
+
+  def create_icon(label, stock_id, x, y)
+    # Cria um botão com um ícone
+    button = Gtk::Button.new
+    button.set_image(Gtk::Image.new(stock: stock_id))
+
+    # Define uma dica de ferramenta
+    button.tooltip_text = label
+
+    # Adiciona o botão ao layout
+    @layout.put(button, x, y)
+
+    # Conecta o evento de clique do botão
+    button.signal_connect('clicked') { puts "Clicou em #{label}" }
+  end
+
+  def run
+    # Exibe a janela
+    @window.show_all
+    Gtk.main
+  end
+end
+
+# Cria uma instância da aplicação e a executa
+app = IconeFlutuanteApp.new
+app.run
